@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "faheem"
+version = "0.1.0"
+description = "Faheem is an end-to-end machine learning application -Built to learn MLOps-"
+authors = ["Mamdouh"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
