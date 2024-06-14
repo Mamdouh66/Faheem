@@ -62,16 +62,13 @@ def health():
 
 @app.get("/predict")
 async def predict(text: str):
-    try:
-        vectorizer = ML_MODELS["vectorizer"]
-        transformer = ML_MODELS["transformer"]
+    vectorizer = ML_MODELS["vectorizer"]
+    transformer = ML_MODELS["transformer"]
 
-        text_vectorized = vectorizer.transform([text])
-        text_transformed = transformer.transform(text_vectorized)
+    text_vectorized = vectorizer.transform([text])
+    text_transformed = transformer.transform(text_vectorized)
 
-        model = ML_MODELS["sentiment_analysis_01"]
-        prediction = model.predict(text_transformed)
+    model = ML_MODELS["sentiment_analysis_01"]
+    prediction = model.predict(text_transformed)
 
-        return {"prediction": prediction[0]}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    return {"prediction": prediction.tolist()[0]}
