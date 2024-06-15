@@ -1,10 +1,10 @@
 import pickle
-import numpy as np
-import polars as pl
 
 from contextlib import asynccontextmanager
+from typing import Tuple
 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.naive_bayes import MultinomialNB
 
 from fastapi import FastAPI, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,32 +12,18 @@ from fastapi.middleware.cors import CORSMiddleware
 ML_MODELS = dict()
 
 
-def load_model(
-    path_to_model: str,
-    path_to_data: pl.DataFrame,
-    path_to_vectorizer: str,
-    path_to_transformer: str,
-):
+def load_model(path_to_model: str) -> Tuple[CountVectorizer, TfidfTransformer, MultinomialNB]:
     with open(path_to_model, "rb") as f:
-        model = pickle.load(f)
-    with open(path_to_vectorizer, "rb") as f:
-        vectorizer = pickle.load(f)
-    with open(path_to_transformer, "rb") as f:
-        transformer = pickle.load(f)
-    ML_MODELS["info"] = pl.read_csv(path_to_data)
-    ML_MODELS["vectorizer"] = vectorizer
-    ML_MODELS["transformer"] = transformer
-    return model
+        vectorizer, transformer, model = pickle.load(f)
+    return vectorizer, transformer, model
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    ML_MODELS["sentiment_analysis_01"] = load_model(
-        "notebooks/models/nb_model.pkl",
-        "data/out.csv",
-        "notebooks/models/vectorizer.pkl",
-        "notebooks/models/tfidf_transformer.pkl",
-    )
+    vectorizer, transformer, model = load_model("notebooks/models/nb_model.pkl")
+    ML_MODELS["vectorizer"] = vectorizer
+    ML_MODELS["transformer"] = transformer
+    ML_MODELS["sentiment_analysis_01"] = model
     yield
     ML_MODELS.clear()
 
