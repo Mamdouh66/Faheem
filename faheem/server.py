@@ -12,7 +12,9 @@ from fastapi.middleware.cors import CORSMiddleware
 ML_MODELS = dict()
 
 
-def load_model(path_to_model: str) -> Tuple[CountVectorizer, TfidfTransformer, MultinomialNB]:
+def load_model(
+    path_to_model: str,
+) -> Tuple[CountVectorizer, TfidfTransformer, MultinomialNB]:
     with open(path_to_model, "rb") as f:
         vectorizer, transformer, model = pickle.load(f)
     return vectorizer, transformer, model
