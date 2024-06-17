@@ -60,3 +60,17 @@ async def predict(text: str):
     prediction = model.predict(text_transformed)
 
     return {"prediction": prediction.tolist()[0]}
+
+
+@app.get("/predict_proba")
+async def predict_proba(text: str):
+    vectorizer = ML_MODELS["vectorizer"]
+    transformer = ML_MODELS["transformer"]
+
+    text_vectorized = vectorizer.transform([text])
+    text_transformed = transformer.transform(text_vectorized)
+
+    model = ML_MODELS["sentiment_analysis_01"]
+    prediction = model.predict_proba(text_transformed)
+
+    return {"prediction": prediction.tolist()[0]}

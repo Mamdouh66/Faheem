@@ -59,3 +59,8 @@ install: ## Install Poetry and project dependencies
 	@echo "$(COLOR_BLUE)Installing dependencies from pyproject.toml...$(COLOR_RESET)"
 	@poetry install
 	@echo "$(COLOR_GREEN)Dependencies installed!$(COLOR_RESET)"
+
+run: ## Run the FastAPI application
+	@echo "$(COLOR_BLUE)Running the application...$(COLOR_RESET)"
+	@fastapi dev faheem/server.py
+	@echo "$(COLOR_GREEN)Application is running!$(COLOR_RESET)"
