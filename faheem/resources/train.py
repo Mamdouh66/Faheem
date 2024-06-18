@@ -1,19 +1,23 @@
-import time
 import json
 
+import mlflow
 import numpy as np
 import polars as pl
-import mlflow
+import typer
 
-from typing import Tuple
+from typing import Tuple, Annotated
 
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 
 from faheem.resources.utils import plot_confusion_matrix
 from faheem.config import settings, logger
 from faheem.resources.evaluate import get_overall_metrics, get_per_class_metrics
+from faheem.resources.data import get_clean_data
+
+app = typer.Typer()
 
 
 def get_numpy_X_y(df: pl.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
@@ -68,7 +72,13 @@ def train_model(
         model (MultinomialNB): The trained Multinomial Naive Bayes model.
     """
     X, y = get_numpy_X_y(df)
-    X_train, X_test, y_train, y_test = split_data(X, y)
+
+    vectorizer = CountVectorizer()
+    X_vectorized = vectorizer.fit_transform(X)
+    tfidf = TfidfTransformer(use_idf=True, norm="l2", smooth_idf=True)
+    X_tfidf = tfidf.fit_transform(vectorizer.fit_transform(X)).toarray()
+
+    X_train, X_test, y_train, y_test = split_data(X_tfidf, y)
 
     logger.info("Training the Multinomial Naive Bayes model...")
     mlflow.set_tracking_uri(settings.MLFLOW_TRACKING_URI)
@@ -94,12 +104,29 @@ def train_model(
             "run_id": mlflow.active_run().info.run_id,
             "experiment_id": mlflow.active_run().info.experiment_id,
             "overall_metrics": get_overall_metrics(y_test, y_pred),
-            "per_class_metrics": get_per_class_metrics(y_test, y_pred),
+            "per_class_metrics": get_per_class_metrics(
+                y_test, y_pred, {0: "Negative", 1: "Positive"}
+            ),
         }
         logger.info(f"Logging the run details: {json.dumps(log_d, indent=2)}")
 
         unique_labels = list(set(y_test))
         plot_confusion_matrix(y_test, y_pred, labels=unique_labels)
-        mlflow.log_artifact("./dump/confusion_matrix.png")
+        mlflow.log_artifact("notebooks/dump/confusion_matrix.png")
 
     return model
+
+
+@app.command()
+def run_train_model(
+    experiment_name: Annotated[
+        str, typer.Option(help="name of the experiment.")
+    ] = "MultinomialNB",
+):
+    df = get_clean_data()
+    model = train_model(df, experiment_name)
+    logger.info("Model training completed successfully!")
+
+
+if __name__ == "__main__":
+    app()
