@@ -6,7 +6,7 @@ COLOR_GREEN = \033[32m
 COLOR_BLUE = \033[34m
 COLOR_YELLOW = \033[33m
 
-.PHONY: help build up down logs clean run-flow install
+.PHONY: help build up down logs clean run-flow install clean
 
 help: ## Display this help
 	@echo "$(COLOR_BLUE)Available targets:$(COLOR_RESET)"
@@ -64,3 +64,10 @@ run: ## Run the FastAPI application (locally)
 	@echo "$(COLOR_BLUE)Running the application...$(COLOR_RESET)"
 	@fastapi dev faheem/server.py
 	@echo "$(COLOR_GREEN)Application is running!$(COLOR_RESET)"
+
+clean: ## Clean up the project directory
+	@find . -type f -name "*.DS_Store" -ls -delete
+	@find . | grep -E "(__pycache__|\.pyc|\.pyo)" | xargs rm -rf
+	@find . | grep -E ".pytest_cache" | xargs rm -rf
+	@find . | grep -E ".ipynb_checkpoints" | xargs rm -rf
+	@rm -rf .coverage*
