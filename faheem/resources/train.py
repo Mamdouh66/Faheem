@@ -1,6 +1,8 @@
+import time
+import json
+
 import numpy as np
 import polars as pl
-
 import mlflow
 
 from typing import Tuple
@@ -10,7 +12,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 
 from faheem.resources.utils import plot_confusion_matrix
-from faheem.config import settings
+from faheem.config import settings, logger
+from faheem.resources.evaluate import get_overall_metrics, get_per_class_metrics
 
 
 def get_numpy_X_y(df: pl.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
@@ -67,6 +70,7 @@ def train_model(
     X, y = get_numpy_X_y(df)
     X_train, X_test, y_train, y_test = split_data(X, y)
 
+    logger.info("Training the Multinomial Naive Bayes model...")
     mlflow.set_tracking_uri(settings.MLFLOW_TRACKING_URI)
     mlflow.set_experiment(experiment_name=experiment_name)
     with mlflow.start_run():
@@ -79,7 +83,6 @@ def train_model(
 
         accuracy = metrics.accuracy_score(y_test, y_pred)
         report = metrics.classification_report(y_test, y_pred, output_dict=True)
-
         mlflow.log_metric("accuracy", accuracy)
         for label, metrics_dict in report.items():
             if isinstance(metrics_dict, dict):
@@ -87,6 +90,13 @@ def train_model(
                     mlflow.log_metric(f"{label}_{metric_name}", metric_value)
 
         mlflow.sklearn.log_model(model, "model")
+        log_d = {
+            "run_id": mlflow.active_run().info.run_id,
+            "experiment_id": mlflow.active_run().info.experiment_id,
+            "overall_metrics": get_overall_metrics(y_test, y_pred),
+            "per_class_metrics": get_per_class_metrics(y_test, y_pred),
+        }
+        logger.info(f"Logging the run details: {json.dumps(log_d, indent=2)}")
 
         unique_labels = list(set(y_test))
         plot_confusion_matrix(y_test, y_pred, labels=unique_labels)
