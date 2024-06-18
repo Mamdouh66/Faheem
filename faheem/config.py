@@ -15,10 +15,10 @@ class Settings(BaseSettings):
     )
     PATH_TO_DATA: str = Field(
         default={
-            "test_arabic_negative_tweets": "../data/test_arabic_negative_tweets.tsv",
-            "test_arabic_positive_tweets": "../data/test_arabic_positive_tweets.tsv",
-            "train_arabic_negative_tweets": "../data/train_arabic_negative_tweets.tsv",
-            "train_arabic_positive_tweets": "../data/train_arabic_positive_tweets.tsv",
+            "test_arabic_negative_tweets": "data/test_arabic_negative_tweets.tsv",
+            "test_arabic_positive_tweets": "data/test_arabic_positive_tweets.tsv",
+            "train_arabic_negative_tweets": "data/train_arabic_negative_tweets.tsv",
+            "train_arabic_positive_tweets": "data/train_arabic_positive_tweets.tsv",
         },
         description="Path to the Arabic data, which is used to train the model.",
     )
