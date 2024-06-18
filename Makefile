@@ -60,7 +60,7 @@ install: ## Install Poetry and project dependencies
 	@poetry install
 	@echo "$(COLOR_GREEN)Dependencies installed!$(COLOR_RESET)"
 
-run: ## Run the FastAPI application
+run: ## Run the FastAPI application (locally)
 	@echo "$(COLOR_BLUE)Running the application...$(COLOR_RESET)"
 	@fastapi dev faheem/server.py
 	@echo "$(COLOR_GREEN)Application is running!$(COLOR_RESET)"

@@ -68,6 +68,6 @@ async def predict(text: str):
 
     return {
         "sentiment": result,
-        "prediction_in_numbers": prediction.tolist()[0],
+        "sentiment_in_numbers": prediction.tolist()[0],
         "proba": proba,
     }
