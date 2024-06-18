@@ -10,10 +10,10 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8")
 
     MLFLOW_TRACKING_URI: str = Field(
-        default=str(Path().resolve().parents[0]) + str(Path("/tmp/mlflow").absolute()),
+        default=str(Path().resolve()) + str(Path("/tmp/mlflow").absolute()),
         description="URI of the MLflow tracking server.",
     )
-    PATH_TO_DATA: str = Field(
+    PATH_TO_DATA: dict = Field(
         default={
             "test_arabic_negative_tweets": "data/test_arabic_negative_tweets.tsv",
             "test_arabic_positive_tweets": "data/test_arabic_positive_tweets.tsv",
@@ -27,5 +27,14 @@ class Settings(BaseSettings):
         description="Path to the trained model, which is used to predict the sentiment of the Arabic text.",
     )
 
+    LOGS_DIR: str = Field(
+        default=str(Path().resolve()) + str(Path("/logs").absolute()),
+        description="Directory to store the logs.",
+    )
+
 
 settings = Settings()
+
+if not os.path.exists(settings.LOGS_DIR):
+    print("Creating logs directory...")
+    os.makedirs(settings.LOGS_DIR)

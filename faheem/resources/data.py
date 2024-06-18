@@ -4,7 +4,7 @@ import string
 
 import polars as pl
 
-from config import settings
+from faheem.config import settings
 
 
 def load_data(file_path: str, label: int) -> pl.DataFrame:
@@ -78,7 +78,9 @@ def preprocess_text(text: str) -> str:
     return text
 
 
-def get_clean_data(file_paths: dict, default: bool = True) -> pl.DataFrame:
+def get_clean_data(
+    file_paths: dict | None = None, default: bool = True
+) -> pl.DataFrame:
     """
     Load, process Arabic tweet datasets into a single cleaned DataFrame.
 
@@ -95,7 +97,7 @@ def get_clean_data(file_paths: dict, default: bool = True) -> pl.DataFrame:
         `pl.DataFrame`: A Polars DataFrame containing the concatenated and cleaned tweet datasets. The DataFrame
         includes an additional column 'cleaned_tweet' which contains the preprocessed text of the tweets.
     """
-    if default:
+    if default and not file_paths:
         file_paths = settings.PATH_TO_DATA
         train_neg = load_data(file_paths["train_arabic_negative_tweets"], 0)
         train_pos = load_data(file_paths["train_arabic_positive_tweets"], 1)
@@ -118,7 +120,7 @@ def get_clean_data(file_paths: dict, default: bool = True) -> pl.DataFrame:
             pl.col("tweet")
             .map_elements(preprocess_text, return_dtype=str)
             .alias("cleaned_tweet")
-        ]
+        ],
     )
 
     return df

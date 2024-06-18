@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import MultinomialNB
 
 from faheem.resources.utils import plot_confusion_matrix
+from faheem.config import settings
 
 
 def get_numpy_X_y(df: pl.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
@@ -66,6 +67,7 @@ def train_model(
     X, y = get_numpy_X_y(df)
     X_train, X_test, y_train, y_test = split_data(X, y)
 
+    mlflow.set_tracking_uri(settings.MLFLOW_TRACKING_URI)
     mlflow.set_experiment(experiment_name=experiment_name)
     with mlflow.start_run():
         mlflow.log_param("model_type", "MultinomialNB")
