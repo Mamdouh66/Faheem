@@ -1,3 +1,5 @@
+SHELL := bash
+
 DOCKER_COMPOSE = docker-compose
 SERVICE_NAME = app
 
@@ -6,7 +8,7 @@ COLOR_GREEN = \033[32m
 COLOR_BLUE = \033[34m
 COLOR_YELLOW = \033[33m
 
-.PHONY: help build up down logs clean run-flow install clean
+.PHONY: help build up down logs docker-clean run-flow install clean
 
 help: ## Display this help
 	@echo "$(COLOR_BLUE)Available targets:$(COLOR_RESET)"
@@ -33,7 +35,7 @@ logs: ## Display logs of the Docker containers
 	@echo "$(COLOR_BLUE)Displaying Docker logs...$(COLOR_RESET)"
 	@$(DOCKER_COMPOSE) logs -f $(SERVICE_NAME)
 
-clean: ## Clean up Docker containers and images
+docker-clean: ## Clean up Docker containers and images
 	@echo "$(COLOR_BLUE)Cleaning up Docker containers and images...$(COLOR_RESET)"
 	@$(DOCKER_COMPOSE) down --rmi all --volumes --remove-orphans
 	@echo "$(COLOR_GREEN)Cleanup completed!$(COLOR_RESET)"
