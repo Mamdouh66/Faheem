@@ -226,4 +226,7 @@ pip-selfcheck.json
 .history
 .ionide
 
+## tmp file for mlflow
+tmp
+
 # End of https://www.toptal.com/developers/gitignore/api/python,visualstudiocode,venv,dotenv,redis,database
