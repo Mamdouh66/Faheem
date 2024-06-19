@@ -52,7 +52,13 @@ def split_data(
         Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]: A tuple containing the training and testing sets for X and y.
     """
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=test_size, stratify=y, shuffle=shuffle
+        X,
+        y,
+        test_size=test_size,
+        shuffle=shuffle,
+        stratify=(
+            y if shuffle else None
+        ),  # stratify is not implemented when shuffle=False
     )
     return X_train, X_test, y_train, y_test
 
