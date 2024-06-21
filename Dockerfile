@@ -6,14 +6,13 @@ ENV POETRY_VIRTUALENVS_CREATE=false \
 
 WORKDIR /app
 
-RUN pip install poetry
+RUN pip install poetry==1.8.3
 
 COPY pyproject.toml poetry.lock ./
 
 RUN poetry install --no-root
 
-COPY faheem ./faheem
+COPY . /app
 
-EXPOSE 3003
-
-CMD ["uvicorn", "faheem.server.app:app", "--host", "0.0.0.0", "--port", "3003", "--reload", "--reload-include", "*"]
+# CMD ["uvicorn", "faheem.server:app", "--host", "0.0.0.0", "--port", "3030"]
+CMD ["fastapi", "run", "faheem/server.py"]
