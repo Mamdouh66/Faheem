@@ -14,6 +14,6 @@ RUN poetry install --no-root
 
 COPY faheem ./faheem
 
-EXPOSE 80
+EXPOSE 3003
 
-CMD ["uvicorn", "faheem.server.app:app", "--host", "0.0.0.0", "--port", "80", "--reload", "--reload-include", "*"]
+CMD ["uvicorn", "faheem.server.app:app", "--host", "0.0.0.0", "--port", "3003", "--reload", "--reload-include", "*"]

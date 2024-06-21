@@ -4,9 +4,9 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: faheem
-    command: uvicorn faheem.main:app --host 0.0.0.0 --port 80 --reload --reload-include *
+    command: uvicorn faheem.main:app --host 0.0.0.0 --port 3003 --reload --reload-include *
     ports:
-      - 8000:80
+      - 8000:3003
     volumes:
       - .:/app
     env_file:
