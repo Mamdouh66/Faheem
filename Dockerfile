@@ -1,18 +1,21 @@
-FROM python:3.11-slim-buster
+FROM python:3.11-slim-buster as requirements-stage
 
-ENV POETRY_VIRTUALENVS_CREATE=false \
-    POETRY_VIRTUALENV_IN_PROJECT=false \
-    POETRY_NO_INTERACTION=1
-
-WORKDIR /app
+WORKDIR /temp
 
 RUN pip install poetry==1.8.3
 
-COPY pyproject.toml poetry.lock ./
+COPY ./pyproject.toml ./poetry.lock* /temp/
 
-RUN poetry install --no-root
+RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
 
-COPY . /app
+FROM python:3.11-slim-buster
 
-# CMD ["uvicorn", "faheem.server:app", "--host", "0.0.0.0", "--port", "3030"]
+WORKDIR /app
+
+COPY --from=requirements-stage /temp/requirements.txt /code/requirements.txt
+
+RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
+
+COPY . .
+
 CMD ["fastapi", "run", "faheem/server.py"]
