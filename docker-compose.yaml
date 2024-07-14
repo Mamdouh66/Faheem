@@ -11,9 +11,11 @@ services:
       - db
     environment:
       - DATABASE_URL=${DATABASE_URL}
-    volumes:
-      - .:/faheem
-      - ./alembic:/alembic
+    develop:
+      watch:
+        - action: sync
+          path: ./faheem
+          target: /app/faheem
 
   db:
     image: postgres:13

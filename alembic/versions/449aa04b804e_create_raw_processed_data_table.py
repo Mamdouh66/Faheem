@@ -35,7 +35,7 @@ def upgrade() -> None:
         sa.Column(
             "raw_data_id",
             UUID(as_uuid=True),
-            sa.ForeignKey("raw_data.id"),
+            sa.ForeignKey("raw_data.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column("cleaned_text", sa.String(), nullable=False),

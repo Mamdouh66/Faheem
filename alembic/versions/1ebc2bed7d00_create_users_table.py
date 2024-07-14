@@ -35,7 +35,7 @@ def upgrade() -> None:
         sa.Column(
             "company_id",
             UUID(as_uuid=True),
-            sa.ForeignKey("companies.id"),
+            sa.ForeignKey("companies.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column("password", sa.String(), nullable=False),

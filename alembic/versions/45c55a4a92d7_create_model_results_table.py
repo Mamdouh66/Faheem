@@ -35,7 +35,7 @@ def upgrade() -> None:
         sa.Column(
             "processed_data_id",
             UUID(as_uuid=True),
-            sa.ForeignKey("processed_data.id"),
+            sa.ForeignKey("processed_data.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column("sentiment", sa.String(), nullable=False),

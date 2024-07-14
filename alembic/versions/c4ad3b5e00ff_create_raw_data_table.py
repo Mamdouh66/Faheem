@@ -35,13 +35,13 @@ def upgrade() -> None:
         sa.Column(
             "company_id",
             UUID(as_uuid=True),
-            sa.ForeignKey("companies.id"),
+            sa.ForeignKey("companies.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column(
             "source_id",
             UUID(as_uuid=True),
-            sa.ForeignKey("data_sources.id"),
+            sa.ForeignKey("data_sources.id", ondelete="CASCADE"),
             nullable=False,
         ),
         sa.Column("data_text", sa.String(), nullable=False),
