@@ -1,6 +1,6 @@
 import pytest
 
-from faheem.resources.data import preprocess_text
+from faheem.resources.ml.data import preprocess_text
 
 
 @pytest.mark.parametrize(

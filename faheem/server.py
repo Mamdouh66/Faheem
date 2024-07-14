@@ -6,7 +6,7 @@ from typing import Tuple
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.naive_bayes import MultinomialNB
 
-from fastapi import FastAPI, status, HTTPException
+from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 
 ML_MODELS = dict()

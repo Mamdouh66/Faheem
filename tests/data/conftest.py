@@ -3,7 +3,7 @@ import polars as pl
 import pandas as pd
 import great_expectations as ge
 
-from faheem.resources.data import get_clean_data
+from faheem.resources.ml.data import get_clean_data
 
 
 @pytest.fixture(scope="module")

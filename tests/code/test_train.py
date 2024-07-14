@@ -2,8 +2,8 @@ import pytest
 
 import numpy as np
 
-from faheem.resources.data import get_clean_data
-from faheem.resources.train import split_data, train_model, get_numpy_X_y
+from faheem.resources.ml.data import get_clean_data
+from faheem.resources.ml.train import split_data, train_model, get_numpy_X_y
 
 from sklearn import metrics
 from sklearn.naive_bayes import MultinomialNB
