@@ -1,8 +1,8 @@
-"""create raw data table
+"""create model_results table
 
-Revision ID: c4ad3b5e00ff
-Revises: cbb8ba11eb3f
-Create Date: 2024-07-14 04:12:16.323961
+Revision ID: 45c55a4a92d7
+Revises: 449aa04b804e
+Create Date: 2024-07-14 04:22:43.400530
 
 """
 
@@ -16,15 +16,15 @@ import uuid
 
 
 # revision identifiers, used by Alembic.
-revision: str = "c4ad3b5e00ff"
-down_revision: Union[str, None] = "cbb8ba11eb3f"
+revision: str = "45c55a4a92d7"
+down_revision: Union[str, None] = "449aa04b804e"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
     op.create_table(
-        "raw_data",
+        "model_results",
         sa.Column(
             "id",
             UUID(as_uuid=True),
@@ -33,21 +33,16 @@ def upgrade() -> None:
             default=uuid.uuid4,
         ),
         sa.Column(
-            "company_id",
+            "processed_data_id",
             UUID(as_uuid=True),
-            sa.ForeignKey("companies.id"),
+            sa.ForeignKey("processed_data.id"),
             nullable=False,
         ),
-        sa.Column(
-            "source_id",
-            UUID(as_uuid=True),
-            sa.ForeignKey("data_sources.id"),
-            nullable=False,
-        ),
-        sa.Column("data_text", sa.String(), nullable=False),
+        sa.Column("sentiment", sa.String(), nullable=False),
+        sa.Column("probability", sa.Float(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False, default=sa.func.now()),
     )
 
 
 def downgrade() -> None:
-    op.drop_table("raw_data")
+    pass
