@@ -13,7 +13,7 @@ services:
       - DATABASE_URL=${DATABASE_URL}
     volumes:
       - .:/faheem
-      - .:/alembic
+      - .:/alembic:versions
 
   db:
     image: postgres:13
