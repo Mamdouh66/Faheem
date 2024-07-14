@@ -32,6 +32,12 @@ class Settings(BaseSettings):
 
     LOGS_DIR: str = str(Path().resolve()) + str(Path("/logs").absolute())
 
+    DATABASE_USERNAME: str
+    DATABASE_PASSWORD: str
+    DATABASE_HOSTNAME: str
+    DATABASE_NAME: str
+    DATABASE_PORT: int
+
 
 settings = Settings()
 
