@@ -1,29 +1,29 @@
-"""create companies table
+"""create data sources table
 
-Revision ID: bc8ab26d0fc8
-Revises:
-Create Date: 2024-07-14 03:42:10.221547
+Revision ID: cbb8ba11eb3f
+Revises: bc8ab26d0fc8
+Create Date: 2024-07-14 04:05:35.382567
 
 """
 
 from typing import Sequence, Union
 
 from alembic import op
-import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import UUID
+import sqlalchemy as sa
 
 import uuid
 
 # revision identifiers, used by Alembic.
-revision: str = "bc8ab26d0fc8"
-down_revision: Union[str, None] = None
+revision: str = "cbb8ba11eb3f"
+down_revision: Union[str, None] = "bc8ab26d0fc8"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
     op.create_table(
-        "companies",
+        "data_sources",
         sa.Column(
             "id",
             UUID(as_uuid=True),
@@ -38,4 +38,4 @@ def upgrade() -> None:
 
 
 def downgrade() -> None:
-    op.drop_table("companies")
+    op.drop_table("data_sources")

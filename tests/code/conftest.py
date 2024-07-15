@@ -2,7 +2,7 @@ import pytest
 import polars as pl
 
 from faheem.config import settings
-from faheem.resources.data import load_data
+from faheem.resources.ml.data import load_data
 
 
 @pytest.fixture

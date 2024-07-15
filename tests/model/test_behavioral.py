@@ -1,7 +1,7 @@
 import pytest
 
 from faheem.config import settings
-from faheem.resources.utils import load_model
+from faheem.resources.ml.utils import load_model
 
 
 def get_label(text: str) -> int:

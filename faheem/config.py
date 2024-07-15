@@ -37,6 +37,7 @@ class Settings(BaseSettings):
     DATABASE_HOSTNAME: str
     DATABASE_NAME: str
     DATABASE_PORT: int
+    DATABASE_URL: str
 
 
 settings = Settings()
