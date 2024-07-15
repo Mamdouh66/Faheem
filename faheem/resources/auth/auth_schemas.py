@@ -34,3 +34,7 @@ class UserCreate(BaseModel):
     @field_validator("username")
     def validate_username(cls, username: str) -> str:
         return validate_username(username)
+
+
+class UserOut(BaseModel):
+    username: str
