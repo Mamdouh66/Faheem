@@ -4,7 +4,7 @@ from uuid import UUID
 
 from typing import Optional
 from datetime import datetime
-from pydantic import BaseModel, SecretStr, field_validator
+from pydantic import BaseModel, SecretStr, field_validator, ConfigDict
 
 
 def validate_username(username: str) -> str:
@@ -15,6 +15,8 @@ def validate_username(username: str) -> str:
 
 
 class UserBase(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: UUID
     company_id: UUID
     username: str
