@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 
-from config import settings
+from faheem.config import settings
+from faheem.resources.auth import auth_schemas
 
 from passlib.context import CryptContext  # type: ignore
 from jose import JWTError, jwt  # type: ignore
@@ -30,3 +31,21 @@ def create_access_token(data: dict):
     )
 
     return encoded_jwt
+
+
+def verify_access_token(token: str, credentials_exception):
+    try:
+        payload = jwt.decode(
+            token=token,
+            key=settings.JWT_SECRET_KEY,
+            algorithms=[settings.JWT_ALGORITHM],
+        )
+        user_id = payload.get("user_id")
+
+        if user_id is None:
+            raise credentials_exception
+        token_data = auth_schemas.TokenData(id=user_id)
+    except JWTError:
+        raise credentials_exception
+
+    return token_data
