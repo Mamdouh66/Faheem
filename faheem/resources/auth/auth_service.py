@@ -6,7 +6,8 @@ from sqlalchemy.orm import Session
 
 def create_new_user(user: auth_schemas.UserCreate, db: Session = None):
     logger.info(f"Creating new user: {user.username} for {user.company_id}...")
-    hashed_password = auth_helpers.Hash.bcrypt(user.password)
+    hashed_password = auth_helpers.Hash.hash_password(user.password)
     user.password = hashed_password
     new_user = auth_dal.create_new_user(user, db)
+    logger.info(f"New user created: {new_user.username}")
     return new_user

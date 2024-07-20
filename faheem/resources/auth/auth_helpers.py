@@ -1,24 +1,28 @@
+import bcrypt
+
 from datetime import datetime, timedelta
 
 from faheem.config import settings
 from faheem.resources.auth import auth_schemas
 
 from fastapi.security import OAuth2PasswordBearer
-from passlib.context import CryptContext
 from jose import JWTError, jwt
-
-password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 class Hash:
-    def bcrypt(password: str):
-        hashed_password = password_context.hash(password)
+    def hash_password(password):
+        pwd_bytes = password.encode("utf-8")
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
         return hashed_password
 
-    def verify(hashed_password, plain_password):
-        return password_context.verify(plain_password, hashed_password)
+    def verify_password(plain_password, hashed_password):
+        password_byte_enc = plain_password.encode("utf-8")
+        return bcrypt.checkpw(
+            password=password_byte_enc, hashed_password=hashed_password
+        )
 
 
 def create_access_token(data: dict):
