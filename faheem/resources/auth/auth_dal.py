@@ -1,9 +1,11 @@
 import uuid
 import sqlalchemy as sa
 
-from faheem.resources.auth import auth_schemas, auth_models
+from faheem.resources.auth import auth_schemas, auth_models, auth_helpers
+from faheem.db.database import get_db
 from faheem.config import logger
 
+from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from pydantic_core import ValidationError
 
@@ -33,3 +35,21 @@ def create_new_user(
         logger.error(f"Failed to create new user: {e}")
         return None
     return new_user
+
+
+def get_current_user(
+    token: str = Depends(auth_helpers.oauth2_scheme), db: Session = Depends(get_db)
+):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+
+    token = auth_helpers.verify_access_token(
+        token=token, credentials_exception=credentials_exception
+    )
+
+    user = db.query(auth_models.User).filter(auth_models.User.id == token.id).first()
+
+    return user

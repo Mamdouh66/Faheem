@@ -3,10 +3,13 @@ from datetime import datetime, timedelta
 from faheem.config import settings
 from faheem.resources.auth import auth_schemas
 
-from passlib.context import CryptContext  # type: ignore
-from jose import JWTError, jwt  # type: ignore
+from fastapi.security import OAuth2PasswordBearer
+from passlib.context import CryptContext
+from jose import JWTError, jwt
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 class Hash:
