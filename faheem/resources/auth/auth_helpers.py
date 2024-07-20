@@ -2,7 +2,7 @@ import bcrypt
 
 from datetime import datetime, timedelta
 
-from faheem.config import settings
+from faheem.config import settings, logger
 from faheem.resources.auth import auth_schemas
 
 from fastapi.security import OAuth2PasswordBearer
@@ -12,17 +12,24 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 
 class Hash:
+    @staticmethod
     def hash_password(password):
         pwd_bytes = password.encode("utf-8")
         salt = bcrypt.gensalt()
         hashed_password = bcrypt.hashpw(password=pwd_bytes, salt=salt)
-        return hashed_password
+        return hashed_password.decode("utf-8")
 
+    @staticmethod
     def verify_password(plain_password, hashed_password):
-        password_byte_enc = plain_password.encode("utf-8")
-        return bcrypt.checkpw(
-            password=password_byte_enc, hashed_password=hashed_password
-        )
+        try:
+            password_byte_enc = plain_password.encode("utf-8")
+            hashed_password_enc = hashed_password.encode("utf-8")
+            return bcrypt.checkpw(
+                password=password_byte_enc, hashed_password=hashed_password_enc
+            )
+        except ValueError:
+            logger.error("Failed to verify password")
+            return False
 
 
 def create_access_token(data: dict):

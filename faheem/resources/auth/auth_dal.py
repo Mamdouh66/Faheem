@@ -2,11 +2,11 @@ import uuid
 import sqlalchemy as sa
 
 from faheem.resources.auth import auth_schemas, auth_models, auth_helpers
-from faheem.db.database import get_db
 from faheem.config import logger
 
 from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
 from pydantic_core import ValidationError
 
 
@@ -38,7 +38,7 @@ def create_new_user(
 
 
 def get_current_user(
-    token: str = Depends(auth_helpers.oauth2_scheme), db: Session = Depends(get_db)
+    token: str = Depends(auth_helpers.oauth2_scheme), db: Session = None
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -53,3 +53,24 @@ def get_current_user(
     user = db.query(auth_models.User).filter(auth_models.User.id == token.id).first()
 
     return user
+
+
+def get_user_per_username(username: str, db: Session = None):
+    try:
+        user = (
+            db.query(auth_models.User)
+            .filter(auth_models.User.username == username)
+            .first()
+        )
+        if user is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"User with username '{username}' not found",
+            )
+        return user
+    except SQLAlchemyError as e:
+        logger.error(f"Failed to get user due to a database error: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="An error occurred while accessing the database",
+        )

@@ -39,9 +39,9 @@ class Settings(BaseSettings):
     DATABASE_PORT: int
     DATABASE_URL: str
 
-    JWT_SECRET_KEY = "your-secret-key"
-    JWT_ALGORITHM = "HS256"
-    JWT_ACCESS_TOKEN_EXPIRE_MINUTES = 30
+    JWT_SECRET_KEY: str
+    JWT_ALGORITHM: str = "HS256"
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
 
 settings = Settings()
