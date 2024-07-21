@@ -9,7 +9,7 @@ from sklearn.naive_bayes import MultinomialNB
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
 
-from faheem.api.auth_controller import router as auth_router
+from faheem.api import auth_controller, companies_controller
 
 ML_MODELS = dict()
 
@@ -44,7 +44,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth_router)
+app.include_router(auth_controller.router)
+app.include_router(companies_controller.router)
 
 
 @app.get("/health", status_code=status.HTTP_200_OK)

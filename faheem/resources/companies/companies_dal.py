@@ -4,7 +4,7 @@ import sqlalchemy as sa
 from faheem.resources.companies import companies_schemas, companies_models
 from faheem.config import logger
 
-from fastapi import Depends, HTTPException, status
+from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from pydantic_core import ValidationError

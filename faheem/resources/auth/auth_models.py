@@ -5,7 +5,7 @@ from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from faheem.db.database import Base
-from faheem.resources.analysis.analysis_models import Company
+from faheem.resources.companies.companies_models import Company
 
 
 class User(Base):

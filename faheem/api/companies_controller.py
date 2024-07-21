@@ -3,6 +3,7 @@ from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from faheem.db.database import get_db
+from faheem.resources.companies import companies_service, companies_schemas
 
 router = APIRouter(
     prefix="/companies",
@@ -10,6 +11,12 @@ router = APIRouter(
 )
 
 
-@router.get("/add")
-def add_company(db: Session = Depends(get_db)):
-    return {"message": "Create a new company"}
+@router.post(
+    "/add",
+    response_model=companies_schemas.CompanyOut,
+    status_code=status.HTTP_201_CREATED,
+)
+def add_company(
+    request: companies_schemas.CompanyCreate, db: Session = Depends(get_db)
+):
+    return companies_service.add_company(request, db)
