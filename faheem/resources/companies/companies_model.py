@@ -14,4 +14,7 @@ class Company(Base):
     )
     name = sa.Column(sa.String, nullable=False)
     description = sa.Column(sa.String, nullable=False)
+    competitors = sa.Column(
+        sa.ARRAY(sa.String(length=255)), nullable=False, server_default="{}"
+    )
     created_at = sa.Column(sa.DateTime, server_default=sa.func.now(), nullable=False)
