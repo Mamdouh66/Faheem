@@ -205,6 +205,8 @@ pip-selfcheck.json
 *.env
 *.txt
 
+## csv
+*.csv
 
 ### VisualStudioCode ###
 .vscode/*

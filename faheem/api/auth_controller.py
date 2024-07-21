@@ -3,7 +3,7 @@ from fastapi.security.oauth2 import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from faheem.db.database import get_db
-from faheem.resources.auth import auth_models, auth_service, auth_schemas, auth_helpers
+from faheem.resources.auth import auth_service, auth_schemas
 
 router = APIRouter(
     prefix="/auth",
